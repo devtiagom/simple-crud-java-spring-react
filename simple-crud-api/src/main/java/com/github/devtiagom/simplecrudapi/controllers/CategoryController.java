@@ -37,8 +37,7 @@ public class CategoryController {
         Optional<CategoryDomain> categoryOptional = this.categoryService.getOneCategory(id);
         if (!categoryOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
-        CategoryGetDTO categoryDTO = new CategoryGetDTO(categoryOptional.get());
-        return ResponseEntity.ok().body(categoryDTO);
+        return ResponseEntity.ok().body(new CategoryGetDTO(categoryOptional.get()));
     }
 
     @PostMapping
@@ -50,5 +49,13 @@ public class CategoryController {
                 .buildAndExpand(categorySaved.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(new CategoryGetDTO(categorySaved));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CategorySaveDTO categoryFromRequest) {
+        Optional<CategoryDomain> categoryOptional = this.categoryService.updateCategory(id, categoryFromRequest);
+        if (!categoryOptional.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
+        return ResponseEntity.ok().body(new CategoryGetDTO(categoryOptional.get()));
     }
 }

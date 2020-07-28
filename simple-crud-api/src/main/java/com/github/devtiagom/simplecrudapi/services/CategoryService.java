@@ -30,4 +30,11 @@ public class CategoryService {
     private CategoryDomain fromDTO(CategorySaveDTO categoryFromRequest) {
         return new CategoryDomain(categoryFromRequest.getName());
     }
+
+    public Optional<CategoryDomain> updateCategory(Long id, CategorySaveDTO categoryFromRequest) {
+        Optional<CategoryDomain> categoryFromDB = this.getOneCategory(id);
+        if (!categoryFromDB.isPresent()) return categoryFromDB;
+        categoryFromDB.get().setName(categoryFromRequest.getName());
+        return Optional.of(this.categoryRepository.save(categoryFromDB.get()));
+    }
 }
