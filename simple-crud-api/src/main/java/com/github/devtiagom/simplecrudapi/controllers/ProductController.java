@@ -37,21 +37,27 @@ public class ProductController {
         Optional<ProductDomain> productOptional = this.productService.getOneProduct(id);
         if (!productOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found!");
-        ProductGetDTO productDTO = new ProductGetDTO(productOptional.get());
-        return ResponseEntity.ok().body(productDTO);
+        return ResponseEntity.ok().body(new ProductGetDTO(productOptional.get()));
     }
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ProductSaveDTO productFromRequest) {
-        Optional<ProductDomain> productSaved = this.productService.saveNewProduct(productFromRequest);
-        if (!productSaved.isPresent())
+        Optional<ProductDomain> productOptional = this.productService.saveNewProduct(productFromRequest);
+        if (!productOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product category not found!");
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(productSaved.get().getId())
+                .buildAndExpand(productOptional.get().getId())
                 .toUri();
-        ProductGetDTO productDTO = new ProductGetDTO(productSaved.get());
-        return ResponseEntity.created(uri).body(productDTO);
+        return ResponseEntity.created(uri).body(new ProductGetDTO(productOptional.get()));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductSaveDTO productFromRequest) {
+        Optional<ProductDomain> productOptional = this.productService.updateProduct(id, productFromRequest);
+        if (!productOptional.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product or category not found!");
+        return ResponseEntity.ok().body(new ProductGetDTO(productOptional.get()));
     }
 }

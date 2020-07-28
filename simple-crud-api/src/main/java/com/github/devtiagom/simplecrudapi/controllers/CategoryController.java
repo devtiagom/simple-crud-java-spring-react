@@ -42,13 +42,13 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryGetDTO> create(@RequestBody CategorySaveDTO categoryFromRequest) {
-        CategoryDomain categorySaved = this.categoryService.saveNewCategory(categoryFromRequest);
+        CategoryDomain categoryFromDB = this.categoryService.saveNewCategory(categoryFromRequest);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(categorySaved.getId())
+                .buildAndExpand(categoryFromDB.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(new CategoryGetDTO(categorySaved));
+        return ResponseEntity.created(uri).body(new CategoryGetDTO(categoryFromDB));
     }
 
     @PutMapping(path = "/{id}")

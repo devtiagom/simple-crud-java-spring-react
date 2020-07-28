@@ -27,7 +27,7 @@ public class ProductService {
 
     public Optional<ProductDomain> saveNewProduct(ProductSaveDTO productFromRequest) {
         Optional<ProductDomain> productToSave = fromDTO(productFromRequest);
-        if (!productToSave.isPresent()) return productToSave;
+        if (!productToSave.isPresent()) return Optional.empty();
         return Optional.of(this.productRepository.save(productToSave.get()));
     }
 
@@ -44,5 +44,19 @@ public class ProductService {
                 .category(category.get())
                 .build();
         return Optional.of(product);
+    }
+
+    public Optional<ProductDomain> updateProduct(Long id, ProductSaveDTO productFromRequest) {
+        Optional<ProductDomain> productFromDB = this.getOneProduct(id);
+        Optional<CategoryDomain> categoryFromDB = this.categoryService
+                .getOneCategory(productFromRequest.getCategoryId());
+        if (!productFromDB.isPresent() || !categoryFromDB.isPresent()) return Optional.empty();
+        ProductDomain productToUpdate = productFromDB.get();
+        productToUpdate.setName(productFromRequest.getName());
+        productToUpdate.setDescription(productFromRequest.getDescription());
+        productToUpdate.setPrice(productFromRequest.getPrice());
+        productToUpdate.setStock(productFromRequest.getStock());
+        productToUpdate.setCategory(categoryFromDB.get());
+        return Optional.of(this.productRepository.save(productToUpdate));
     }
 }
