@@ -58,4 +58,11 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
         return ResponseEntity.ok().body(new CategoryGetDTO(categoryOptional.get()));
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!this.categoryService.deleteCategory(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
+        return ResponseEntity.noContent().build();
+    }
 }

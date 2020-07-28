@@ -59,4 +59,11 @@ public class ProductService {
         productToUpdate.setCategory(categoryFromDB.get());
         return Optional.of(this.productRepository.save(productToUpdate));
     }
+
+    public boolean deleteProduct(Long id) {
+        Optional<ProductDomain> productFromDB = this.getOneProduct(id);
+        if (!productFromDB.isPresent()) return Boolean.FALSE;
+        this.productRepository.delete(productFromDB.get());
+        return Boolean.TRUE;
+    }
 }

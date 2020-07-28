@@ -60,4 +60,11 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product or category not found!");
         return ResponseEntity.ok().body(new ProductGetDTO(productOptional.get()));
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!this.productService.deleteProduct(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found!");
+        return ResponseEntity.noContent().build();
+    }
 }

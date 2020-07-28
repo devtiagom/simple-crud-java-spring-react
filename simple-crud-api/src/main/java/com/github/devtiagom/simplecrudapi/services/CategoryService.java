@@ -33,8 +33,15 @@ public class CategoryService {
 
     public Optional<CategoryDomain> updateCategory(Long id, CategorySaveDTO categoryFromRequest) {
         Optional<CategoryDomain> categoryFromDB = this.getOneCategory(id);
-        if (!categoryFromDB.isPresent()) return categoryFromDB;
+        if (!categoryFromDB.isPresent()) return Optional.empty();
         categoryFromDB.get().setName(categoryFromRequest.getName());
         return Optional.of(this.categoryRepository.save(categoryFromDB.get()));
+    }
+
+    public boolean deleteCategory(Long id) {
+        Optional<CategoryDomain> categoryFromDB = this.getOneCategory(id);
+        if (!categoryFromDB.isPresent()) return Boolean.FALSE;
+        this.categoryRepository.delete(categoryFromDB.get());
+        return Boolean.TRUE;
     }
 }
