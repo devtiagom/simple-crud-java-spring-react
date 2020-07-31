@@ -1,0 +1,7 @@
+.app-main-area {
+  margin-top: var(--header-height);
+  margin-left: var(--side-bar-width);
+  width: calc(100vw - var(--side-bar-width));
+  height: calc(100vh - var(--header-height));
+  background-color: var(--main-bg-color);
+}

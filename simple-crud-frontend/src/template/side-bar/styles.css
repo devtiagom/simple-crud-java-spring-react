@@ -1,0 +1,9 @@
+.app-side-bar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0px;
+  width: var(--side-bar-width);
+  height: calc(100% - var(--header-height));
+  background-color: var(--side-bar-bg-color);
+  padding-top: 30px;
+}

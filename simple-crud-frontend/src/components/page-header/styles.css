@@ -1,0 +1,23 @@
+.page-header {
+  background-color: white;
+  padding: 5px 20px;
+  border-bottom: 1px solid #CDCDCD;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.page-header .page-icon {
+  color: #727272;
+  font-size: 16px;
+  margin-top: 2px;
+  margin-left: 10px;
+}
+
+.page-header .page-title {
+  color: #727272;
+  font-size: 16px;
+  margin-left: 7px;
+}
