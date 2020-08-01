@@ -105,7 +105,19 @@ function ProductViewer() {
         </div>
 
         <div className="card-footer bg-white"></div>
-
+          <nav aria-label="Registered peoducts">
+            <ul className="pagination justify-content-center">
+              <li className="page-item disabled">
+                <a className="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+              </li>
+              <li className="page-item active"><a class="page-link" href="#">1</a></li>
+              <li className="page-item"><a class="page-link" href="#">2</a></li>
+              <li className="page-item"><a class="page-link" href="#">3</a></li>
+              <li className="page-item">
+                <a className="page-link" href="#">Próxima</a>
+              </li>
+            </ul>
+          </nav>
       </div>
     </div>
   );
