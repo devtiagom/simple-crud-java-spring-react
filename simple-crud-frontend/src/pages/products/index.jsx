@@ -12,8 +12,10 @@ function Products() {
     <AppLayout>
       <div className="products">
         <PageHeader icon={FaShoppingCart} title="Produtos" />
-        <ProductRegister />
-        <ProductViewer />
+        <div className="container products-body">
+          <ProductRegister />
+          <ProductViewer />
+        </div>
       </div>
     </AppLayout>
   );
