@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
+import api from '../../services/api';
 
 function ProductViewer() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    api.get('/products').then(response => setProducts(response.data));
+  }, []);
+
   const handleEdit = (id) => {
     console.log("HandleEdit " + id);
   }
 
   const handleDelete = (id) => {
     console.log("HandleDelete " + id);
+  }
+
+  const renderTable = () => {
+    return products.map(product => (
+      <tr key={product.id}>
+        <th scope="row">{product.id}</th>
+        <td>{product.name}</td>
+        <td>{product.description}</td>
+        <td>{product.price}</td>
+        <td>{product.stock}</td>
+        <td>{product.category}</td>
+        <td>
+          <button
+            className="btn btn-sm btn-success mr-1"
+            onClick={() => handleEdit(product.id)}
+          >
+            <FaPen />
+          </button>
+          <button
+            className="btn btn-sm btn-danger"
+            onClick={() => handleDelete(product.id)}
+          >
+            <FaTrash />
+          </button>
+        </td>
+      </tr>
+    ));
   }
 
   return (
@@ -21,20 +55,21 @@ function ProductViewer() {
         </div>
 
         <div className="card-body">
-          <table className="table table-striped">
+          <table className="table table-sm table-striped">
             <thead className="thead-dark">
               <tr>
-              <th>#</th>
-              <th>Nome</th>
-              <th>Descrição</th>
-              <th>Preço (R$)</th>
-              <th>Quantidade</th>
-              <th>Categoria</th>
-              <th>Ações</th>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preço (R$)</th>
+                <th>Quantidade</th>
+                <th>Categoria</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {renderTable()}
+              {/* <tr>
                 <th scope="row">1</th>
                 <td>TV</td>
                 <td>Televisão</td>
@@ -99,20 +134,20 @@ function ProductViewer() {
                     <FaTrash />
                   </button>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
 
         <div className="card-footer bg-white"></div>
-          <nav aria-label="Registered peoducts">
+          <nav className="mb-0" aria-label="Registered peoducts">
             <ul className="pagination justify-content-center">
               <li className="page-item disabled">
-                <a className="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">Anterior</a>
               </li>
-              <li className="page-item active"><a class="page-link" href="#">1</a></li>
-              <li className="page-item"><a class="page-link" href="#">2</a></li>
-              <li className="page-item"><a class="page-link" href="#">3</a></li>
+              <li className="page-item active"><a className="page-link" href="#">1</a></li>
+              <li className="page-item"><a className="page-link" href="#">2</a></li>
+              <li className="page-item"><a className="page-link" href="#">3</a></li>
               <li className="page-item">
                 <a className="page-link" href="#">Próxima</a>
               </li>

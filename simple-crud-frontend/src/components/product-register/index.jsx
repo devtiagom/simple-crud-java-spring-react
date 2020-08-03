@@ -27,37 +27,37 @@ function ProductRegister() {
           <form className="container">
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <div className="form-group">
+                <div className="form-group mb-2">
                   <label htmlFor="name">Nome:</label>
                   <input
                     type="text"
                     id="name"
                     name="name"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     placeholder="Nome do produto"
                   />
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-5">
-                <div className="form-group">
+                <div className="form-group mb-2">
                   <label htmlFor="description">Descrição:</label>
                   <input
                     type="text"
                     id="description"
                     name="description"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     placeholder="Descrição do produto"
                   />
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                <div className="form-group">
+                <div className="form-group mb-2">
                   <label htmlFor="price">Preço:</label>
                   <input
                     type="text"
                     id="price"
                     name="price"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     placeholder="Preço (R$)"
                   />
                 </div>
@@ -66,21 +66,21 @@ function ProductRegister() {
 
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4">
-                <div className="form-group">
+                <div className="form-group mb-2">
                   <label htmlFor="stock">Quantidade:</label>
                   <input
                     type="number"
                     id="stock"
                     name="stock"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     placeholder="Quantidade em estoque"
                   />
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-8">
-                <div className="form-group">
+                <div className="form-group mb-2">
                   <label htmlFor="category">Categoria:</label>
-                  <select name="category" id="category" className="form-control">
+                  <select name="category" id="category" className="form-control form-control-sm">
                     <option value="0">Selecione uma categoria</option>
                     <option value="1">Eletro</option>
                     <option value="2">Cama, mesa e banho</option>
