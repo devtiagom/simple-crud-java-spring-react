@@ -15,14 +15,14 @@
 
 .menu-item .menu-item-link:hover:not(.active){
   background-color: var(--side-bar-link-bg-color);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .active {
   background-color: var(--side-bar-link-bg-color);
   border-left: 3px solid var(--side-bar-link-left-color);
   /* border-radius: 0px 5px 5px 0px; */
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .menu-item .menu-item-link .menu-item-icon {

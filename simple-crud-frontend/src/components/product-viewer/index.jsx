@@ -4,7 +4,7 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 import './styles.css';
 import api from '../../services/api';
 
-function ProductViewer() {
+function ProductViewer({ refresh, updatedProductList }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,14 @@ function ProductViewer() {
     console.log("HandleDelete " + id);
   }
 
-  const renderTable = () => {
+  async function updateProductList() {
+    await api.get('/products').then(response => setProducts(response.data));
+    updatedProductList();
+  }
+
+  if (refresh) updateProductList();
+
+  const renderRows = () => {
     return products.map(product => (
       <tr key={product.id}>
         <th scope="row">{product.id}</th>
@@ -27,7 +34,7 @@ function ProductViewer() {
         <td>{product.description}</td>
         <td>{product.price}</td>
         <td>{product.stock}</td>
-        <td>{product.category}</td>
+        <td>{product.categoryName}</td>
         <td>
           <button
             className="btn btn-sm btn-success mr-1"
@@ -68,73 +75,7 @@ function ProductViewer() {
               </tr>
             </thead>
             <tbody>
-              {renderTable()}
-              {/* <tr>
-                <th scope="row">1</th>
-                <td>TV</td>
-                <td>Televisão</td>
-                <td>2345,67</td>
-                <td>10</td>
-                <td>Eletro</td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-success mr-1"
-                    onClick={() => handleEdit(1)}
-                  >
-                    <FaPen />
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(1)}
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Micro-ondas</td>
-                <td>Forno micro-ondas</td>
-                <td>456,78</td>
-                <td>11</td>
-                <td>Eletro</td>
-                <td>
-                <button
-                    className="btn btn-sm btn-success mr-1"
-                    onClick={() => handleEdit(2)}
-                  >
-                    <FaPen />
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(2)}
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Sofá</td>
-                <td>Sofá 5 lugares</td>
-                <td>1234,56</td>
-                <td>12</td>
-                <td>Móveis</td>
-                <td>
-                <button
-                    className="btn btn-sm btn-success mr-1"
-                    onClick={() => handleEdit(3)}
-                  >
-                    <FaPen />
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(3)}
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr> */}
+              {renderRows()}
             </tbody>
           </table>
         </div>

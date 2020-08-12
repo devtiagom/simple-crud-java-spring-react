@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEraser, FaSave, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
 
-function ProductRegister() {
-  const handleSubmit = () => {
-    console.log("Handlesubmit");
+import api from '../../services/api';
+
+function ProductRegister({ savedNewProduct }) {
+  const [categories, setCategories] = useState([]);
+
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    description: '',
+    price: 0.0,
+    stock: 0,
+    categoryId: 0
+  });
+
+  useEffect(() => {
+    api.get('categories').then(response => setCategories(response.data));
+  }, []);
+
+  async function handleSubmit() {
+    await api.post('products', newProduct);
+    savedNewProduct();
   }
 
   const handleClean = () => {
@@ -14,6 +31,31 @@ function ProductRegister() {
 
   const handleDelete = () => {
     console.log("HandleDelete");
+  }
+
+  function createNewProduct ({ target }) {
+    const field = target.name;
+    const value = target.value;
+
+    switch (field) {
+      case 'name':
+        setNewProduct({ ...newProduct, name: value });
+        break;
+      case 'description':
+        setNewProduct({ ...newProduct, description: value });
+        break;
+      case 'price':
+        setNewProduct({ ...newProduct, price: value });
+        break;
+      case 'stock':
+        setNewProduct({ ...newProduct, stock: value });
+        break;
+      case 'category':
+        setNewProduct({ ...newProduct, categoryId: value });
+        break;
+      default:
+        setNewProduct({ ...newProduct });
+    }
   }
 
   return (
@@ -34,7 +76,9 @@ function ProductRegister() {
                     id="name"
                     name="name"
                     className="form-control form-control-sm"
+                    value={newProduct.name}
                     placeholder="Nome do produto"
+                    onChange={createNewProduct}
                   />
                 </div>
               </div>
@@ -46,7 +90,9 @@ function ProductRegister() {
                     id="description"
                     name="description"
                     className="form-control form-control-sm"
+                    value={newProduct.description}
                     placeholder="Descrição do produto"
+                    onChange={createNewProduct}
                   />
                 </div>
               </div>
@@ -54,11 +100,13 @@ function ProductRegister() {
                 <div className="form-group mb-2">
                   <label htmlFor="price">Preço:</label>
                   <input
-                    type="text"
+                    type="number"
                     id="price"
                     name="price"
                     className="form-control form-control-sm"
+                    value={newProduct.price}
                     placeholder="Preço (R$)"
+                    onChange={createNewProduct}
                   />
                 </div>
               </div>
@@ -73,18 +121,30 @@ function ProductRegister() {
                     id="stock"
                     name="stock"
                     className="form-control form-control-sm"
+                    value={newProduct.stock}
                     placeholder="Quantidade em estoque"
+                    onChange={createNewProduct}
                   />
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-8">
                 <div className="form-group mb-2">
                   <label htmlFor="category">Categoria:</label>
-                  <select name="category" id="category" className="form-control form-control-sm">
+                  <select
+                    name="category"
+                    id="category"
+                    className="form-control form-control-sm"
+                    value={newProduct.categoryId}
+                    onChange={createNewProduct}
+                  >
                     <option value="0">Selecione uma categoria</option>
-                    <option value="1">Eletro</option>
-                    <option value="2">Cama, mesa e banho</option>
-                    <option value="3">Móveis</option>
+                    {categories.map(category => {
+                      return (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
