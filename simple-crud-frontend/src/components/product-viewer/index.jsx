@@ -1,33 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
-import api from '../../services/api';
 
-function ProductViewer({ refresh, updatedProductList }) {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    api.get('/products').then(response => setProducts(response.data));
-  }, []);
-
-  const handleEdit = (id) => {
-    console.log("HandleEdit " + id);
-  }
-
-  const handleDelete = (id) => {
-    console.log("HandleDelete " + id);
-  }
-
-  async function updateProductList() {
-    await api.get('/products').then(response => setProducts(response.data));
-    updatedProductList();
-  }
-
-  if (refresh) updateProductList();
-
-  const renderRows = () => {
-    return products.map(product => (
+function ProductViewer({ productList, updateProduct, deleteProduct }) {
+  function renderRows() {
+    return productList.map(product => (
       <tr key={product.id}>
         <th scope="row">{product.id}</th>
         <td>{product.name}</td>
@@ -38,13 +16,13 @@ function ProductViewer({ refresh, updatedProductList }) {
         <td>
           <button
             className="btn btn-sm btn-success mr-1"
-            onClick={() => handleEdit(product.id)}
+            onClick={() => updateProduct(product.id)}
           >
             <FaPen />
           </button>
           <button
             className="btn btn-sm btn-danger"
-            onClick={() => handleDelete(product.id)}
+            onClick={() => deleteProduct(product.id)}
           >
             <FaTrash />
           </button>

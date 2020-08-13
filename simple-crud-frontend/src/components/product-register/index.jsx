@@ -1,63 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FaEraser, FaSave, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
 
-import api from '../../services/api';
-
-function ProductRegister({ savedNewProduct }) {
-  const [categories, setCategories] = useState([]);
-
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    description: '',
-    price: 0.0,
-    stock: 0,
-    categoryId: 0
-  });
-
-  useEffect(() => {
-    api.get('categories').then(response => setCategories(response.data));
-  }, []);
-
-  async function handleSubmit() {
-    await api.post('products', newProduct);
-    savedNewProduct();
-  }
-
-  const handleClean = () => {
-    console.log("HandleClean");
-  }
-
-  const handleDelete = () => {
-    console.log("HandleDelete");
-  }
-
-  function createNewProduct ({ target }) {
-    const field = target.name;
-    const value = target.value;
-
-    switch (field) {
-      case 'name':
-        setNewProduct({ ...newProduct, name: value });
-        break;
-      case 'description':
-        setNewProduct({ ...newProduct, description: value });
-        break;
-      case 'price':
-        setNewProduct({ ...newProduct, price: value });
-        break;
-      case 'stock':
-        setNewProduct({ ...newProduct, stock: value });
-        break;
-      case 'category':
-        setNewProduct({ ...newProduct, categoryId: value });
-        break;
-      default:
-        setNewProduct({ ...newProduct });
-    }
-  }
-
+function ProductRegister({
+  categoryList,
+  currentProduct,
+  updateProductField,
+  submit,
+  clearFields,
+  cancelOperation,
+  confirmUpdate,
+  confirmDelete
+}) {
   return (
     <div className="products-register">
       <div className="card">
@@ -76,9 +31,9 @@ function ProductRegister({ savedNewProduct }) {
                     id="name"
                     name="name"
                     className="form-control form-control-sm"
-                    value={newProduct.name}
+                    value={currentProduct.name}
                     placeholder="Nome do produto"
-                    onChange={createNewProduct}
+                    onChange={updateProductField}
                   />
                 </div>
               </div>
@@ -90,9 +45,9 @@ function ProductRegister({ savedNewProduct }) {
                     id="description"
                     name="description"
                     className="form-control form-control-sm"
-                    value={newProduct.description}
+                    value={currentProduct.description}
                     placeholder="Descrição do produto"
-                    onChange={createNewProduct}
+                    onChange={updateProductField}
                   />
                 </div>
               </div>
@@ -104,9 +59,9 @@ function ProductRegister({ savedNewProduct }) {
                     id="price"
                     name="price"
                     className="form-control form-control-sm"
-                    value={newProduct.price}
+                    value={currentProduct.price}
                     placeholder="Preço (R$)"
-                    onChange={createNewProduct}
+                    onChange={updateProductField}
                   />
                 </div>
               </div>
@@ -121,9 +76,9 @@ function ProductRegister({ savedNewProduct }) {
                     id="stock"
                     name="stock"
                     className="form-control form-control-sm"
-                    value={newProduct.stock}
+                    value={currentProduct.stock}
                     placeholder="Quantidade em estoque"
-                    onChange={createNewProduct}
+                    onChange={updateProductField}
                   />
                 </div>
               </div>
@@ -134,11 +89,11 @@ function ProductRegister({ savedNewProduct }) {
                     name="category"
                     id="category"
                     className="form-control form-control-sm"
-                    value={newProduct.categoryId}
-                    onChange={createNewProduct}
+                    value={currentProduct.categoryId}
+                    onChange={updateProductField}
                   >
                     <option value="0">Selecione uma categoria</option>
-                    {categories.map(category => {
+                    {categoryList.map(category => {
                       return (
                         <option key={category.id} value={category.id}>
                           {category.name}
@@ -157,7 +112,7 @@ function ProductRegister({ savedNewProduct }) {
             <button
               type="reset"
               className="btn btn-sm btn-secondary"
-              onClick={handleClean}
+              onClick={clearFields}
             >
               <FaEraser /> Limpar
           </button>
@@ -165,7 +120,7 @@ function ProductRegister({ savedNewProduct }) {
             <button
               type="submit"
               className="btn btn-sm btn-primary ml-2"
-              onClick={handleSubmit}
+              onClick={submit}
             >
               <FaSave /> Salvar
           </button>
@@ -173,7 +128,7 @@ function ProductRegister({ savedNewProduct }) {
             <button
               type="button"
               className="btn btn-sm btn-danger ml-2"
-              onClick={handleDelete}
+              onClick={confirmDelete}
             >
               <FaTrash /> Deletar
           </button>
