@@ -14,7 +14,8 @@ const productInitialState = {
   description: '',
   price: '',
   stock: '',
-  categoryId: 0
+  categoryId: 0,
+  readOnly: false,
 };
 
 function Products() {
@@ -27,14 +28,25 @@ function Products() {
     getProducts();
   }, []);
 
-  function getCategories() {
-    api.get('categories').then(response => setCategories(response.data));
-  }
-  
-  function getProducts() {
-    api.get('/products').then(response => setProducts(response.data));
+  const getCategories = () => api.get('/categories').then(response => setCategories(response.data));
+  const getProducts = () => api.get('/products').then(response => setProducts(response.data));
+
+  async function makeRequest(method, id) {
+    await api[method](`/products/${id ? id : ''}`, {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      categoryId: product.categoryId,
+    });
+    getProducts();
+    handleClearFields();
   }
 
+  const handleSubmit = () => makeRequest('post');
+  const handleConfirmUpdate = () => makeRequest('put', product.id);
+  const handleConfirmDelete = () => makeRequest('delete', product.id);
+  
   function handleUpdateProductField({ target }) {
     const field = target.name;
     const value = target.value;
@@ -60,21 +72,13 @@ function Products() {
     }
   }
 
-  async function handleSubmit() {
-    await api.post('products', product);
-    getProducts();
-    handleClearFields();
-  }
-
-  function handleClearFields() {
-    setProduct(productInitialState);
-  }
+  const handleClearFields = () => setProduct(productInitialState);
 
   function handleCancelOperation() {
     console.log('handleCancelOperation');
   }
 
-  function handleUpdate(selectedProduct) {
+  function fillInFields(selectedProduct, readOnly) {
     const productCategory = categories.filter(category => {
       return category.name === selectedProduct.categoryName;
     });
@@ -87,28 +91,12 @@ function Products() {
       price: selectedProduct.price,
       stock: selectedProduct.stock,
       categoryId: productCategory[0].id,
+      readOnly,
     });
   }
 
-  async function handleConfirmUpdate() {
-    await api.put(`/products/${product.id}`, {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      categoryId: product.categoryId,
-    });
-    getProducts();
-    handleClearFields();
-  }
-
-  function handleDelete(selectedProduct) {
-    console.log('Delete: ', selectedProduct);
-  }
-
-  function handleConfirmDelete() {
-    console.log('handleConfirmDelete');
-  }
+  const handleUpdate = selectedProduct => fillInFields(selectedProduct, false);
+  const handleDelete = selectedProduct => fillInFields(selectedProduct, true);
 
   return (
     <AppLayout>

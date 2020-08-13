@@ -34,6 +34,7 @@ function ProductRegister({
                     value={currentProduct.name}
                     placeholder="Nome do produto"
                     onChange={updateProductField}
+                    readOnly={currentProduct.readOnly}
                   />
                 </div>
               </div>
@@ -48,6 +49,7 @@ function ProductRegister({
                     value={currentProduct.description}
                     placeholder="Descrição do produto"
                     onChange={updateProductField}
+                    readOnly={currentProduct.readOnly}
                   />
                 </div>
               </div>
@@ -62,6 +64,7 @@ function ProductRegister({
                     value={currentProduct.price}
                     placeholder="Preço (R$)"
                     onChange={updateProductField}
+                    readOnly={currentProduct.readOnly}
                   />
                 </div>
               </div>
@@ -79,6 +82,7 @@ function ProductRegister({
                     value={currentProduct.stock}
                     placeholder="Quantidade em estoque"
                     onChange={updateProductField}
+                    readOnly={currentProduct.readOnly}
                   />
                 </div>
               </div>
@@ -91,6 +95,7 @@ function ProductRegister({
                     className="form-control form-control-sm"
                     value={currentProduct.categoryId}
                     onChange={updateProductField}
+                    readOnly={currentProduct.readOnly}
                   >
                     <option value="0">Selecione uma categoria</option>
                     {categoryList.map(category => {

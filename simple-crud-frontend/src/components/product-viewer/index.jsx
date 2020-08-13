@@ -5,6 +5,12 @@ import './styles.css';
 
 function ProductViewer({ productList, updateProduct, deleteProduct }) {
   function renderRows() {
+    productList.sort((current, next) => {
+      if (current.id > next.id) return 1;
+      if (current.id < next.id) return -1;
+      return 0;
+    });
+
     return productList.map(product => (
       <tr key={product.id}>
         <th scope="row">{product.id}</th>
@@ -40,7 +46,7 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
         </div>
 
         <div className="card-body">
-          <table className="table table-sm table-striped">
+          <table className="table table-sm table-striped table-hover">
             <thead className="thead-dark">
               <tr>
                 <th>#</th>
