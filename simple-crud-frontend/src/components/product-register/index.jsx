@@ -1,7 +1,8 @@
 import React from 'react';
-import { FaEraser, FaSave, FaTrash } from 'react-icons/fa';
+import { FaEraser, FaSave, FaPen, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
+import Show from '../show';
 
 function ProductRegister({
   categoryList,
@@ -11,7 +12,8 @@ function ProductRegister({
   clearFields,
   cancelOperation,
   confirmUpdate,
-  confirmDelete
+  confirmDelete,
+  registerMode
 }) {
   return (
     <div className="products-register">
@@ -114,50 +116,60 @@ function ProductRegister({
 
         <div className="card-footer bg-white">
           <div className="actions">
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              onClick={clearFields}
-            >
-              <FaEraser />
-              <span className="ml-2">Limpar</span>
-            </button>
+            <Show condition={registerMode === 'save'}>
+              <button
+                type="button"
+                className="btn btn-sm btn-secondary"
+                onClick={clearFields}
+              >
+                <FaEraser />
+                <span className="ml-2">Limpar</span>
+              </button>
+            </Show>
 
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary ml-2"
-              onClick={cancelOperation}
-            >
-              <FaEraser />
-              <span className="ml-2">Cancelar</span>
-            </button>
+            <Show condition={registerMode === 'update' || registerMode === 'delete'}>
+              <button
+                type="button"
+                className="btn btn-sm btn-secondary ml-2"
+                onClick={cancelOperation}
+              >
+                <FaEraser />
+                <span className="ml-2">Cancelar</span>
+              </button>
+            </Show>
 
-            <button
-              type="button"
-              className="btn btn-sm btn-primary ml-2"
-              onClick={submit}
-            >
-              <FaSave />
-              <span className="ml-2">Salvar</span>
-            </button>
+            <Show condition={registerMode === 'save'}>
+              <button
+                type="button"
+                className="btn btn-sm btn-primary ml-2"
+                onClick={submit}
+              >
+                <FaSave />
+                <span className="ml-2">Salvar</span>
+              </button>
+            </Show>
 
-            <button
-              type="button"
-              className="btn btn-sm btn-primary ml-2"
-              onClick={confirmUpdate}
-            >
-              <FaTrash />
-              <span className="ml-2">Atualizar</span>
-            </button>
+            <Show condition={registerMode === 'update'}>
+              <button
+                type="button"
+                className="btn btn-sm btn-primary ml-2"
+                onClick={confirmUpdate}
+              >
+                <FaPen />
+                <span className="ml-2">Atualizar</span>
+              </button>
+            </Show>
 
-            <button
-              type="button"
-              className="btn btn-sm btn-danger ml-2"
-              onClick={confirmDelete}
-            >
-              <FaTrash />
-              <span className="ml-2">Deletar</span>
-            </button>
+            <Show condition={registerMode === 'delete'}>
+              <button
+                type="button"
+                className="btn btn-sm btn-danger ml-2"
+                onClick={confirmDelete}
+              >
+                <FaTrash />
+                <span className="ml-2">Deletar</span>
+              </button>
+            </Show>
           </div>
         </div>
 

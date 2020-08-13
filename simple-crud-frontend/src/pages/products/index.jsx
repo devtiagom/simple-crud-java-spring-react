@@ -18,10 +18,13 @@ const productInitialState = {
   readOnly: false,
 };
 
+const modeInitialState = 'save';
+
 function Products() {
   const [product, setProduct] = useState(productInitialState);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [mode, setMode] = useState(modeInitialState);
 
   useEffect(() => {
     getCategories();
@@ -41,6 +44,7 @@ function Products() {
     });
     getProducts();
     handleClearFields();
+    setMode(modeInitialState);
   }
 
   const handleSubmit = () => makeRequest('post');
@@ -75,10 +79,11 @@ function Products() {
   const handleClearFields = () => setProduct(productInitialState);
 
   function handleCancelOperation() {
-    console.log('handleCancelOperation');
+    handleClearFields();
+    setMode(modeInitialState);
   }
 
-  function fillInFields(selectedProduct, readOnly) {
+  function fillInFields(selectedProduct, changeMode, readOnly) {
     const productCategory = categories.filter(category => {
       return category.name === selectedProduct.categoryName;
     });
@@ -93,10 +98,12 @@ function Products() {
       categoryId: productCategory[0].id,
       readOnly,
     });
+
+    setMode(changeMode);
   }
 
-  const handleUpdate = selectedProduct => fillInFields(selectedProduct, false);
-  const handleDelete = selectedProduct => fillInFields(selectedProduct, true);
+  const handleUpdate = selectedProduct => fillInFields(selectedProduct, 'update', false);
+  const handleDelete = selectedProduct => fillInFields(selectedProduct, 'delete', true);
 
   return (
     <AppLayout>
@@ -113,6 +120,7 @@ function Products() {
             cancelOperation={handleCancelOperation}
             confirmUpdate={handleConfirmUpdate}
             confirmDelete={handleConfirmDelete}
+            registerMode={mode}
           />
 
           <ProductViewer
