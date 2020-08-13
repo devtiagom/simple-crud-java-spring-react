@@ -15,14 +15,14 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
         <td>{product.categoryName}</td>
         <td>
           <button
-            className="btn btn-sm btn-success mr-1"
-            onClick={() => updateProduct(product.id)}
+            className="btn btn-sm btn-primary mr-1"
+            onClick={() => updateProduct(product)}
           >
             <FaPen />
           </button>
           <button
             className="btn btn-sm btn-danger"
-            onClick={() => deleteProduct(product.id)}
+            onClick={() => deleteProduct(product)}
           >
             <FaTrash />
           </button>

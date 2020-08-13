@@ -9,6 +9,7 @@ import ProductRegister from '../../components/product-register';
 import ProductViewer from '../../components/product-viewer';
 
 const productInitialState = {
+  id: 0,
   name: '',
   description: '',
   price: '',
@@ -73,16 +74,36 @@ function Products() {
     console.log('handleCancelOperation');
   }
 
-  function handleUpdate(productId) {
-    console.log(`handleUpdate(${productId})`);
+  function handleUpdate(selectedProduct) {
+    const productCategory = categories.filter(category => {
+      return category.name === selectedProduct.categoryName;
+    });
+
+    setProduct({
+      ...product,
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      description: selectedProduct.description,
+      price: selectedProduct.price,
+      stock: selectedProduct.stock,
+      categoryId: productCategory[0].id,
+    });
   }
 
-  function handleConfirmUpdate() {
-    console.log('handleConfirmUpdate');
+  async function handleConfirmUpdate() {
+    await api.put(`/products/${product.id}`, {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      categoryId: product.categoryId,
+    });
+    getProducts();
+    handleClearFields();
   }
 
-  function handleDelete(productId) {
-    console.log(`handleDelete(${productId})`);
+  function handleDelete(selectedProduct) {
+    console.log('Delete: ', selectedProduct);
   }
 
   function handleConfirmDelete() {

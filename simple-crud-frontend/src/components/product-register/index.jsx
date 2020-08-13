@@ -110,28 +110,49 @@ function ProductRegister({
         <div className="card-footer bg-white">
           <div className="actions">
             <button
-              type="reset"
+              type="button"
               className="btn btn-sm btn-secondary"
               onClick={clearFields}
             >
-              <FaEraser /> Limpar
-          </button>
+              <FaEraser />
+              <span className="ml-2">Limpar</span>
+            </button>
 
             <button
-              type="submit"
+              type="button"
+              className="btn btn-sm btn-secondary ml-2"
+              onClick={cancelOperation}
+            >
+              <FaEraser />
+              <span className="ml-2">Cancelar</span>
+            </button>
+
+            <button
+              type="button"
               className="btn btn-sm btn-primary ml-2"
               onClick={submit}
             >
-              <FaSave /> Salvar
-          </button>
+              <FaSave />
+              <span className="ml-2">Salvar</span>
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-sm btn-primary ml-2"
+              onClick={confirmUpdate}
+            >
+              <FaTrash />
+              <span className="ml-2">Atualizar</span>
+            </button>
 
             <button
               type="button"
               className="btn btn-sm btn-danger ml-2"
               onClick={confirmDelete}
             >
-              <FaTrash /> Deletar
-          </button>
+              <FaTrash />
+              <span className="ml-2">Deletar</span>
+            </button>
           </div>
         </div>
 
