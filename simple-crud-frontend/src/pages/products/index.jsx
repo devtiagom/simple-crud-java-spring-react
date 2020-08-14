@@ -22,8 +22,8 @@ const modeInitialState = 'save';
 
 function Products() {
   const [product, setProduct] = useState(productInitialState);
-  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [mode, setMode] = useState(modeInitialState);
 
   useEffect(() => {

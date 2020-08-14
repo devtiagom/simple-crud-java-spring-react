@@ -3,16 +3,22 @@
   padding: 5px 20px;
   border-bottom: 1px solid #CDCDCD;
 
+  position: fixed;
+  top: var(--header-height);
+  left: var(--side-bar-width);
+  width: calc(100% - var(--side-bar-width));
+  height: var(--page-header-height);
+  z-index: 1;
+
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .page-header .page-icon {
   color: #727272;
   font-size: 16px;
-  margin-top: 2px;
   margin-left: 10px;
 }
 

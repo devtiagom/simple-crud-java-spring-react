@@ -38,9 +38,7 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
   }
 
   return (
-    <div className="products-viewer">
       <div className="card mt-2">
-
         <div className="card-header bg-white">
           <h5 className="card-title mb-0">Produtos Cadastrados</h5>
         </div>
@@ -65,7 +63,7 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
         </div>
 
         <div className="card-footer bg-white"></div>
-          <nav className="mb-0" aria-label="Registered peoducts">
+          <nav className="mb-0" aria-label="Registered products">
             <ul className="pagination justify-content-center">
               <li className="page-item disabled">
                 <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">Anterior</a>
@@ -79,7 +77,6 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
             </ul>
           </nav>
       </div>
-    </div>
   );
 }
 
