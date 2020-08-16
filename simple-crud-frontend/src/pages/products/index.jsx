@@ -7,6 +7,14 @@ import AppLayout from '../../template/AppLayout';
 import PageHeader from '../../components/page-header';
 import ProductRegister from '../../components/product-register';
 import ProductViewer from '../../components/product-viewer';
+import AlertToast from '../../components/alert-toast';
+import Show from '../../components/show';
+
+const HTTP_STATUS_OK = 200;
+const HTTP_STATUS_CREATED = 201;
+const HTTP_STATUS_NO_CONTENT = 204;
+
+const ALERT_TOAST_TIMEOUT = 3000;
 
 const productInitialState = {
   id: 0,
@@ -25,6 +33,8 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [mode, setMode] = useState(modeInitialState);
+  const [serverResponseAlert, setServerResponseAlert] = useState({});
+  const [showAlertToast, setShowAlertToast] = useState(false);
 
   useEffect(() => {
     getCategories();
@@ -35,13 +45,46 @@ function Products() {
   const getProducts = () => api.get('/products').then(response => setProducts(response.data));
 
   async function makeRequest(method, id) {
-    await api[method](`/products/${id ? id : ''}`, {
+    const response = await api[method](`/products/${id ? id : ''}`, {
       name: product.name,
       description: product.description,
       price: product.price,
       stock: product.stock,
       categoryId: product.categoryId,
     });
+
+    const newResponseAlert = {};
+
+    if (method === 'post') {
+      if (response.status === HTTP_STATUS_CREATED) {
+        newResponseAlert.alertType = 'success';
+        newResponseAlert.alertText = 'Produto cadastrado com sucesso!';
+      } else {
+        newResponseAlert.alertType = 'error';
+        newResponseAlert.alertText = 'Falha ao cadastrar produto!';
+      }
+    } else if (method === 'put') {
+      if (response.status === HTTP_STATUS_OK) {
+        newResponseAlert.alertType = 'success';
+        newResponseAlert.alertText = 'Produto atualizado com sucesso!';
+      } else {
+        newResponseAlert.alertType = 'error';
+        newResponseAlert.alertText = 'Falha ao atualizar os dados do produto!';
+      }
+    } else {
+      if (response.status === HTTP_STATUS_NO_CONTENT) {
+        newResponseAlert.alertType = 'success';
+        newResponseAlert.alertText = 'Produto excluído com sucesso!';
+      } else {
+        newResponseAlert.alertType = 'error';
+        newResponseAlert.alertText = 'Falha ao excluir produto!';
+      }
+    }
+
+    setServerResponseAlert({ ...serverResponseAlert, ...newResponseAlert });
+    setShowAlertToast(true);
+    setTimeout(() => setShowAlertToast(false), ALERT_TOAST_TIMEOUT);
+    
     getProducts();
     handleClearFields();
     setMode(modeInitialState);
@@ -50,7 +93,7 @@ function Products() {
   const handleSubmit = () => makeRequest('post');
   const handleConfirmUpdate = () => makeRequest('put', product.id);
   const handleConfirmDelete = () => makeRequest('delete', product.id);
-  
+
   function handleUpdateProductField({ target }) {
     const field = target.name;
     const value = target.value;
@@ -109,6 +152,13 @@ function Products() {
     <AppLayout>
       <div className="products">
         <PageHeader icon={FaShoppingCart} title="Produtos" />
+
+        <Show condition={showAlertToast}>
+          <AlertToast
+            alertType={serverResponseAlert.alertType}
+            alertText={serverResponseAlert.alertText}
+          />
+        </Show>
 
         <div className="container products-body">
           <ProductRegister
