@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProductSaveDTO productFromRequest) {
+    public ResponseEntity<?> create(@Valid @RequestBody ProductSaveDTO productFromRequest) {
         Optional<ProductDomain> productOptional = this.productService.saveNewProduct(productFromRequest);
         if (!productOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product category not found!");
@@ -54,7 +55,7 @@ public class ProductController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductSaveDTO productFromRequest) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ProductSaveDTO productFromRequest) {
         Optional<ProductDomain> productOptional = this.productService.updateProduct(id, productFromRequest);
         if (!productOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product or category not found!");

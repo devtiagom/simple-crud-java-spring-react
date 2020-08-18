@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryGetDTO> create(@RequestBody CategorySaveDTO categoryFromRequest) {
+    public ResponseEntity<CategoryGetDTO> create(@Valid @RequestBody CategorySaveDTO categoryFromRequest) {
         CategoryDomain categoryFromDB = this.categoryService.saveNewCategory(categoryFromRequest);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -52,7 +53,7 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CategorySaveDTO categoryFromRequest) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CategorySaveDTO categoryFromRequest) {
         Optional<CategoryDomain> categoryOptional = this.categoryService.updateCategory(id, categoryFromRequest);
         if (!categoryOptional.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
