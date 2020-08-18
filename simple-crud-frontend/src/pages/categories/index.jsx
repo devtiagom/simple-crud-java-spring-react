@@ -77,6 +77,8 @@ function Categories() {
     getCategories();
     handleClearFields();
     setMode(modeInitialState);
+
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
   const handleSubmit = () => makeRequest('post');
