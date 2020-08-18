@@ -110,6 +110,8 @@ function Categories() {
     });
 
     setMode(changeMode);
+
+    window.scrollTo(0, 0);
   }
 
   const handleUpdate = selectedCategory => fillInFields(selectedCategory, 'update', false);

@@ -84,7 +84,7 @@ function Products() {
     setServerResponseAlert({ ...serverResponseAlert, ...newResponseAlert });
     setShowAlertToast(true);
     setTimeout(() => setShowAlertToast(false), ALERT_TOAST_TIMEOUT);
-    
+
     getProducts();
     handleClearFields();
     setMode(modeInitialState);
@@ -143,6 +143,8 @@ function Products() {
     });
 
     setMode(changeMode);
+
+    window.scrollTo(0, 0);
   }
 
   const handleUpdate = selectedProduct => fillInFields(selectedProduct, 'update', false);
