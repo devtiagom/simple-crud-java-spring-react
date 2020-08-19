@@ -4,9 +4,11 @@ import com.github.devtiagom.simplecrudapi.controllers.dtos.request.CategorySaveD
 import com.github.devtiagom.simplecrudapi.domain.CategoryDomain;
 import com.github.devtiagom.simplecrudapi.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +17,20 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryDomain> getAllCategories() {
-        return this.categoryRepository.findAll();
+    public Page<CategoryDomain> getAllCategories(
+            Integer page,
+            Integer size,
+            String direction,
+            String orderBy
+    ) {
+        return this.categoryRepository.findAll(
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.Direction.valueOf(direction),
+                        orderBy
+                )
+        );
     }
 
     public Optional<CategoryDomain> getOneCategory(Long id) {

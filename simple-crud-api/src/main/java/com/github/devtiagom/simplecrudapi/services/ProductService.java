@@ -5,9 +5,11 @@ import com.github.devtiagom.simplecrudapi.domain.CategoryDomain;
 import com.github.devtiagom.simplecrudapi.domain.ProductDomain;
 import com.github.devtiagom.simplecrudapi.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +19,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
-    public List<ProductDomain> getAllProducts() {
-        return this.productRepository.findAll();
+    public Page<ProductDomain> getAllProducts(
+            Integer page,
+            Integer size,
+            String direction,
+            String orderBy
+    ) {
+        return this.productRepository.findAll(
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.Direction.valueOf(direction),
+                        orderBy
+                )
+        );
     }
 
     public Optional<ProductDomain> getOneProduct(Long id) {
