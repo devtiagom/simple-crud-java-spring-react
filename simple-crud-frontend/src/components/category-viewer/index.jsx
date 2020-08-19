@@ -5,13 +5,13 @@ import './styles.css';
 
 function CategoryViewer({ categoryList, updateCategory, deleteCategory }) {
   function renderRows() {
-    categoryList.sort((current, next) => {
-      if (current.id > next.id) return 1;
-      if (current.id < next.id) return -1;
-      return 0;
-    });
+    // categoryList.content.sort((current, next) => {
+    //   if (current.id > next.id) return 1;
+    //   if (current.id < next.id) return -1;
+    //   return 0;
+    // });
 
-    return categoryList.map(category => (
+    return categoryList.content.map(category => (
       <tr key={category.id}>
         <th scope="row">{category.id}</th>
         <td>{category.name}</td>
@@ -49,7 +49,7 @@ function CategoryViewer({ categoryList, updateCategory, deleteCategory }) {
             </tr>
           </thead>
           <tbody>
-            {renderRows()}
+            {categoryList.content && renderRows()}
           </tbody>
         </table>
       </div>

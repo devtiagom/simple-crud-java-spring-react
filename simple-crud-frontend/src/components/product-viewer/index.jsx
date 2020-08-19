@@ -5,13 +5,13 @@ import './styles.css';
 
 function ProductViewer({ productList, updateProduct, deleteProduct }) {
   function renderRows() {
-    productList.sort((current, next) => {
-      if (current.id > next.id) return 1;
-      if (current.id < next.id) return -1;
-      return 0;
-    });
+    // productList.content.sort((current, next) => {
+    //   if (current.id > next.id) return 1;
+    //   if (current.id < next.id) return -1;
+    //   return 0;
+    // });
 
-    return productList.map(product => (
+    return productList.content.map(product => (
       <tr key={product.id}>
         <th scope="row">{product.id}</th>
         <td>{product.name}</td>
@@ -57,7 +57,7 @@ function ProductViewer({ productList, updateProduct, deleteProduct }) {
               </tr>
             </thead>
             <tbody>
-              {renderRows()}
+              {productList.content && renderRows()}
             </tbody>
           </table>
         </div>

@@ -38,7 +38,7 @@ const defaultErrorResponseAlert = {
 
 function Categories() {
   const [category, setCategory] = useState(CategoryInitialState);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState({});
   const [mode, setMode] = useState(modeInitialState);
   const [serverResponseAlert, setServerResponseAlert] = useState({});
   const [showAlertToast, setShowAlertToast] = useState(false);
@@ -47,7 +47,7 @@ function Categories() {
     getCategories();
   }, []);
 
-  const getCategories = () => api.get('/categories').then(response => setCategories(response.data));
+  const getCategories = () => api.get('/categories?orderBy=id').then(response => setCategories(response.data));
 
   async function makeRequest(method, id) {
     let response = {};

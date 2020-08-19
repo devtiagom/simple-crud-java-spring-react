@@ -99,7 +99,7 @@ function ProductRegister({
                   readOnly={currentProduct.readOnly}
                 >
                   <option value="0">Selecione uma categoria</option>
-                  {categoryList.map(category => {
+                  {categoryList.content && categoryList.content.map(category => {
                     return (
                       <option key={category.id} value={category.id}>
                         {category.name}

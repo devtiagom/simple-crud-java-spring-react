@@ -42,8 +42,8 @@ const defaultErrorResponseAlert = {
 
 function Products() {
   const [product, setProduct] = useState(productInitialState);
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState({});
+  const [categories, setCategories] = useState({});
   const [mode, setMode] = useState(modeInitialState);
   const [serverResponseAlert, setServerResponseAlert] = useState({});
   const [showAlertToast, setShowAlertToast] = useState(false);
@@ -54,7 +54,7 @@ function Products() {
   }, []);
 
   const getCategories = () => api.get('/categories').then(response => setCategories(response.data));
-  const getProducts = () => api.get('/products').then(response => setProducts(response.data));
+  const getProducts = () => api.get('/products?orderBy=id').then(response => setProducts(response.data));
 
   async function makeRequest(method, id) {
     let response = {};
@@ -167,7 +167,7 @@ function Products() {
   }
 
   function fillInFields(selectedProduct, changeMode, readOnly) {
-    const productCategory = categories.filter(category => {
+    const productCategory = categories.content.filter(category => {
       return category.name === selectedProduct.categoryName;
     });
 
