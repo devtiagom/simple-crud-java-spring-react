@@ -28,6 +28,18 @@ const productInitialState = {
 
 const modeInitialState = 'save';
 
+const defaultSuccessResponseAlert = {
+  alertClass: 'alert-success',
+  alertType: 'single',
+  alertTitle: '',
+  alertTextStrong: 'Ok',
+};
+
+const defaultErrorResponseAlert = {
+  alertClass: 'alert-danger',
+  alertType: 'multi',
+};
+
 function Products() {
   const [product, setProduct] = useState(productInitialState);
   const [products, setProducts] = useState([]);
@@ -45,39 +57,67 @@ function Products() {
   const getProducts = () => api.get('/products').then(response => setProducts(response.data));
 
   async function makeRequest(method, id) {
-    const response = await api[method](`/products/${id ? id : ''}`, {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      categoryId: product.categoryId,
-    });
+    let response = {};
 
-    const newResponseAlert = {};
+    try {
+      response = await api[method](`/products/${id ? id : ''}`, {
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        categoryId: product.categoryId,
+      });
+
+      window.scrollTo(0, document.body.scrollHeight);
+    } catch (error) {
+      response = error.response;
+    }
+
+    if (response === undefined) return;
+
+    let newResponseAlert = {};
 
     if (method === 'post') {
       if (response.status === HTTP_STATUS_CREATED) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Produto cadastrado com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao cadastrar produto!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     } else if (method === 'put') {
       if (response.status === HTTP_STATUS_OK) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Produto atualizado com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao atualizar os dados do produto!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     } else {
       if (response.status === HTTP_STATUS_NO_CONTENT) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Produto excluído com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao excluir produto!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     }
 
@@ -88,8 +128,6 @@ function Products() {
     getProducts();
     handleClearFields();
     setMode(modeInitialState);
-
-    window.scrollTo(0, document.body.scrollHeight);
   }
 
   const handleSubmit = () => makeRequest('post');
@@ -159,8 +197,12 @@ function Products() {
 
         <Show condition={showAlertToast}>
           <AlertToast
+            alertClass={serverResponseAlert.alertClass}
             alertType={serverResponseAlert.alertType}
+            alertTitle={serverResponseAlert.alertTitle}
+            alertTextStrong={serverResponseAlert.alertTextStrong}
             alertText={serverResponseAlert.alertText}
+            alertList={serverResponseAlert.alertList}
           />
         </Show>
 

@@ -24,6 +24,18 @@ const CategoryInitialState = {
 
 const modeInitialState = 'save';
 
+const defaultSuccessResponseAlert = {
+  alertClass: 'alert-success',
+  alertType: 'single',
+  alertTitle: '',
+  alertTextStrong: 'Ok',
+};
+
+const defaultErrorResponseAlert = {
+  alertClass: 'alert-danger',
+  alertType: 'multi',
+};
+
 function Categories() {
   const [category, setCategory] = useState(CategoryInitialState);
   const [categories, setCategories] = useState([]);
@@ -38,35 +50,63 @@ function Categories() {
   const getCategories = () => api.get('/categories').then(response => setCategories(response.data));
 
   async function makeRequest(method, id) {
-    const response = await api[method](`/categories/${id ? id : ''}`, {
-      name: category.name,
-    });
+    let response = {};
 
-    const newResponseAlert = {};
+    try {
+      response = await api[method](`/categories/${id ? id : ''}`, {
+        name: category.name,
+      });
+
+      window.scrollTo(0, document.body.scrollHeight);
+    } catch (error) {
+      response = error.response;
+    }
+
+    if (response === undefined) return;
+
+    let newResponseAlert = {};
 
     if (method === 'post') {
       if (response.status === HTTP_STATUS_CREATED) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Categoria cadastrada com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao cadastrar categoria!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     } else if (method === 'put') {
       if (response.status === HTTP_STATUS_OK) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Categoria atualizada com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao atualizar os dados da categoria!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     } else {
       if (response.status === HTTP_STATUS_NO_CONTENT) {
-        newResponseAlert.alertType = 'success';
+        newResponseAlert = { ...defaultSuccessResponseAlert };
         newResponseAlert.alertText = 'Categoria excluída com sucesso!';
       } else {
-        newResponseAlert.alertType = 'error';
-        newResponseAlert.alertText = 'Falha ao excluir categoria!';
+        newResponseAlert = { ...defaultErrorResponseAlert };
+        newResponseAlert.alertTitle = response.data.msg;
+        newResponseAlert.alertList = response.data.errors.map(error => {
+          return {
+            strong: error.fieldName,
+            text: error.message,
+          };
+        });
       }
     }
 
@@ -77,8 +117,6 @@ function Categories() {
     getCategories();
     handleClearFields();
     setMode(modeInitialState);
-
-    window.scrollTo(0, document.body.scrollHeight);
   }
 
   const handleSubmit = () => makeRequest('post');
@@ -126,8 +164,12 @@ function Categories() {
 
         <Show condition={showAlertToast}>
           <AlertToast
+            alertClass={serverResponseAlert.alertClass}
             alertType={serverResponseAlert.alertType}
+            alertTitle={serverResponseAlert.alertTitle}
+            alertTextStrong={serverResponseAlert.alertTextStrong}
             alertText={serverResponseAlert.alertText}
+            alertList={serverResponseAlert.alertList}
           />
         </Show>
 

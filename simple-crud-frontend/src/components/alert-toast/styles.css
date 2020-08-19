@@ -1,18 +1,22 @@
-.toast-alert {
+.alert-toast {
   position: fixed;
   top: calc(var(--pages-default-margin-top) + 2%);
   right: 3%;
   z-index: 1;
 }
 
-.toast-alert .alert-success {
+.alert-toast .alert-success {
   border-left: 3px solid #155724;
 }
 
-.toast-alert .alert-danger {
+.alert-toast .alert-danger {
   border-left: 3px solid #721C24;
 }
 
-.toast-alert button {
+.alert-toast ul {
+  list-style: none;
+}
+
+.alert-toast button {
   outline: none;
 }
