@@ -26,6 +26,13 @@ const productInitialState = {
   readOnly: false,
 };
 
+const filterParametersInitialState = {
+  page: 0,
+  size: 5,
+  orderBy: 'id',
+  direction: 'ASC',
+};
+
 const modeInitialState = 'save';
 
 const defaultSuccessResponseAlert = {
@@ -44,6 +51,7 @@ function Products() {
   const [product, setProduct] = useState(productInitialState);
   const [products, setProducts] = useState({});
   const [categories, setCategories] = useState({});
+  const [filterParameters, setFilterParameters] = useState(filterParametersInitialState);
   const [mode, setMode] = useState(modeInitialState);
   const [serverResponseAlert, setServerResponseAlert] = useState({});
   const [showAlertToast, setShowAlertToast] = useState(false);
@@ -51,10 +59,22 @@ function Products() {
   useEffect(() => {
     getCategories();
     getProducts();
-  }, []);
+  }, [filterParameters]);
 
-  const getCategories = () => api.get('/categories').then(response => setCategories(response.data));
-  const getProducts = () => api.get('/products?orderBy=id').then(response => setProducts(response.data));
+  function getCategories() {
+    api.get('/categories')
+      .then(response => setCategories(response.data));
+  }
+
+  function getProducts() {
+    const filters = `page=${filterParameters.page}`
+      .concat(`&size=${filterParameters.size}`)
+      .concat(`&orderBy=${filterParameters.orderBy}`)
+      .concat(`&direction=${filterParameters.direction}`);
+
+    api.get(`/products?${filters}`)
+      .then(response => setProducts(response.data));
+  }
 
   async function makeRequest(method, id) {
     let response = {};
@@ -223,6 +243,8 @@ function Products() {
             productList={products}
             updateProduct={handleUpdate}
             deleteProduct={handleDelete}
+            filters={filterParameters}
+            updateFilters={setFilterParameters}
           />
         </div>
       </div>

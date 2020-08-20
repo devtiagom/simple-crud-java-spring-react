@@ -1,0 +1,4 @@
+.card-footer button:focus, .card-footer button:active {
+  outline: none !important;
+  box-shadow: none;
+}

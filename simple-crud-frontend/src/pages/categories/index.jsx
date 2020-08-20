@@ -22,6 +22,13 @@ const CategoryInitialState = {
   readOnly: false,
 };
 
+const filterParametersInitialState = {
+  page: 0,
+  size: 5,
+  orderBy: 'id',
+  direction: 'ASC',
+};
+
 const modeInitialState = 'save';
 
 const defaultSuccessResponseAlert = {
@@ -39,15 +46,24 @@ const defaultErrorResponseAlert = {
 function Categories() {
   const [category, setCategory] = useState(CategoryInitialState);
   const [categories, setCategories] = useState({});
+  const [filterParameters, setFilterParameters] = useState(filterParametersInitialState);
   const [mode, setMode] = useState(modeInitialState);
   const [serverResponseAlert, setServerResponseAlert] = useState({});
   const [showAlertToast, setShowAlertToast] = useState(false);
 
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [filterParameters]);
 
-  const getCategories = () => api.get('/categories?orderBy=id').then(response => setCategories(response.data));
+  function getCategories() {
+    const filters = `page=${filterParameters.page}`
+      .concat(`&size=${filterParameters.size}`)
+      .concat(`&orderBy=${filterParameters.orderBy}`)
+      .concat(`&direction=${filterParameters.direction}`);
+
+    api.get(`/categories?${filters}`)
+      .then(response => setCategories(response.data));
+  }
 
   async function makeRequest(method, id) {
     let response = {};
@@ -189,6 +205,8 @@ function Categories() {
             categoryList={categories}
             updateCategory={handleUpdate}
             deleteCategory={handleDelete}
+            filters={filterParameters}
+            updateFilters={setFilterParameters}
           />
         </div>
       </div>

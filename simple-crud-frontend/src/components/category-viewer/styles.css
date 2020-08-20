@@ -1,7 +1,16 @@
-.category-viewer-table-ids {
-  width: 35px;
+.category-viewer-table-id {
+  width: 25px;
+}
+
+.category-viewer-table-name {
+  text-align: center;
 }
 
 .category-viewer-table-actions {
   width: 100px;
+}
+
+.card-footer button:focus, .card-footer button:active {
+  outline: none !important;
+  box-shadow: none;
 }

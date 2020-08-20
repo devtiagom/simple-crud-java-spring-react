@@ -3,18 +3,18 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 
 import './styles.css';
 
-function CategoryViewer({ categoryList, updateCategory, deleteCategory }) {
-  function renderRows() {
-    // categoryList.content.sort((current, next) => {
-    //   if (current.id > next.id) return 1;
-    //   if (current.id < next.id) return -1;
-    //   return 0;
-    // });
-
-    return categoryList.content.map(category => (
+function CategoryViewer({
+  categoryList,
+  updateCategory,
+  deleteCategory,
+  filters,
+  updateFilters
+}) {
+  function renderRows(categories) {
+    return categories.map(category => (
       <tr key={category.id}>
         <th scope="row">{category.id}</th>
-        <td>{category.name}</td>
+        <td className="category-viewer-table-name">{category.name}</td>
         <td>
           <button
             className="btn btn-sm btn-primary mr-1"
@@ -33,6 +33,58 @@ function CategoryViewer({ categoryList, updateCategory, deleteCategory }) {
     ));
   }
 
+  function renderPagination() {
+    const { totalPages, number } = categoryList;
+    const listItems = [];
+
+    for (let page = 0; page < totalPages; page++) {
+      listItems.push(
+        <li
+          className={`page-item ${page === number ? 'active' : ''}`}
+          key={page}
+        >
+          <button
+            type="button"
+            className="page-link"
+            onClick={() => updateFilters({ ...filters, page })}
+          >
+            {page + 1}
+          </button>
+        </li>
+      );
+    }
+
+    return (
+      <nav className="mb-0" aria-label="Registered categories">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${number === 0 ? 'disabled' : ''}`}>
+            <button
+              type="button"
+              className="page-link"
+              tabIndex="-1"
+              aria-disabled="true"
+              onClick={() => updateFilters({ ...filters, page: number - 1 })}
+            >
+              Anterior
+            </button>
+          </li>
+
+          {listItems}
+          
+          <li className={`page-item ${totalPages <= number + 1 ? 'disabled' : ''}`}>
+            <button
+              type="button"
+              className="page-link"
+              onClick={() => updateFilters({ ...filters, page: number + 1 })}
+            >
+              Próxima
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+
   return (
     <div className="card mt-2">
       <div className="card-header bg-white">
@@ -43,31 +95,19 @@ function CategoryViewer({ categoryList, updateCategory, deleteCategory }) {
         <table className="table table-sm table-striped table-hover">
           <thead className="thead-dark">
             <tr>
-              <th className='category-viewer-table-ids'>#</th>
-              <th>Nome</th>
-              <th className='category-viewer-table-actions'>Ações</th>
+              <th className="category-viewer-table-id">#</th>
+              <th className="category-viewer-table-name">Nome</th>
+              <th className="category-viewer-table-actions">Ações</th>
             </tr>
           </thead>
           <tbody>
-            {categoryList.content && renderRows()}
+            {categoryList.content && renderRows(categoryList.content)}
           </tbody>
         </table>
       </div>
 
-      <div className="card-footer bg-white">
-        <nav className="mb-0" aria-label="Registered categories">
-          <ul className="pagination justify-content-center">
-            <li className="page-item disabled">
-              <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">Anterior</a>
-            </li>
-            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link" href="#">2</a></li>
-            <li className="page-item"><a className="page-link" href="#">3</a></li>
-            <li className="page-item">
-              <a className="page-link" href="#">Próxima</a>
-            </li>
-          </ul>
-        </nav>
+      <div className="card-footer bg-white pb-0">
+        {categoryList.totalPages && renderPagination()}
       </div>
     </div>
   );
