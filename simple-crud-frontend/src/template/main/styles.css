@@ -1,7 +1,15 @@
 .app-main-area {
   margin-top: var(--header-height);
-  margin-left: var(--side-bar-width);
-  width: calc(100vw - var(--side-bar-width));
   min-height: calc(100vh - var(--header-height));
   background-color: var(--main-bg-color);
+}
+
+.main-with-side-bar {
+  margin-left: var(--side-bar-width);
+  width: calc(100vw - var(--side-bar-width));
+}
+
+.main-without-side-bar {
+  margin-left: 0;
+  width: 100vw;
 }

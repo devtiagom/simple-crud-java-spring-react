@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
-import './styles.css';
 import api from '../../services/api';
 import AppLayout from '../../template/AppLayout';
+import Page from '../../components/page';
 import PageHeader from '../../components/page-header';
 import ProductRegister from '../../components/product-register';
 import ProductViewer from '../../components/product-viewer';
@@ -212,7 +212,7 @@ function Products() {
 
   return (
     <AppLayout>
-      <div className="products">
+      <Page>
         <PageHeader icon={FaShoppingCart} title="Produtos" />
 
         <Show condition={showAlertToast}>
@@ -226,7 +226,7 @@ function Products() {
           />
         </Show>
 
-        <div className="container products-body">
+        <div className="container page-body">
           <ProductRegister
             categoryList={categories}
             currentProduct={product}
@@ -247,7 +247,7 @@ function Products() {
             updateFilters={setFilterParameters}
           />
         </div>
-      </div>
+      </Page>
     </AppLayout>
   );
 }

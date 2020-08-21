@@ -2,9 +2,11 @@ import React from 'react';
 
 import './styles.css';
 
-function Main({children}) {
+function Main({ children, showSideBar }) {
   return (
-    <main className="app-main-area">{children}</main>
+    <main className={`app-main-area ${showSideBar ? 'main-with-side-bar' : 'main-without-side-bar'}`}>
+      {children}
+    </main>
   );
 }
 

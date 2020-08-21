@@ -1,7 +1,0 @@
-.categories {
-  min-height: calc(100vh - var(--header-height));
-}
-
-.categories-body {
-  margin-top: var(--pages-default-margin-top);
-}

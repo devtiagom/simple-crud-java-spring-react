@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaList } from 'react-icons/fa';
 
-import './styles.css';
 import api from '../../services/api';
 import AppLayout from '../../template/AppLayout';
+import Page from '../../components/page';
 import PageHeader from '../../components/page-header';
 import CategoryRegister from '../../components/category-register';
 import CategoryViewer from '../../components/category-viewer';
@@ -175,7 +175,7 @@ function Categories() {
 
   return (
     <AppLayout>
-      <div className="categories">
+      <Page>
         <PageHeader icon={FaList} title="Categorias" />
 
         <Show condition={showAlertToast}>
@@ -189,7 +189,7 @@ function Categories() {
           />
         </Show>
 
-        <div className="container categories-body">
+        <div className="container page-body">
           <CategoryRegister
             currentCategory={category}
             updateCategoryField={handleUpdateCategoryField}
@@ -209,7 +209,7 @@ function Categories() {
             updateFilters={setFilterParameters}
           />
         </div>
-      </div>
+      </Page>
     </AppLayout>
   );
 }

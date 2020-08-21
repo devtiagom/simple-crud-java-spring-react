@@ -7,7 +7,7 @@ function Item({ icon, path, text }) {
   const Icon = icon;
 
   const match = useRouteMatch({
-    path: path,
+    path,
     exact: true
   });
 
