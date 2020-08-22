@@ -1,6 +1,5 @@
 .page-header {
   background-color: white;
-  padding: 5px 20px;
   border-bottom: 1px solid #CDCDCD;
   position: fixed;
   top: var(--header-height);
@@ -11,16 +10,20 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+
+  transition: all 0.3s;
 }
 
 .with-side-bar {
   left: var(--side-bar-width);
   width: calc(100% - var(--side-bar-width));
+  padding-left: 20px;
 }
 
 .without-side-bar {
   left: 0;
   width: 100%;
+  padding-left: 120px;
 }
 
 .page-header .page-icon {

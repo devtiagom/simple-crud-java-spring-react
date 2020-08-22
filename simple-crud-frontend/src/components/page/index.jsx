@@ -2,12 +2,10 @@ import React from 'react';
 
 import './styles.css';
 
-function Page({ children, showSideBar }) {
+function Page({ children }) {
   return (
     <div className="page">
-      {React.Children.map(children, child => {
-        return React.cloneElement(child, { showSideBar })
-      })}
+      {children}
     </div>
   );
 }

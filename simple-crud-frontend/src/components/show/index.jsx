@@ -1,4 +1,4 @@
-export default function Show ({ condition, children }) {
+export default function Show ({ children, condition }) {
   if (condition) return children;
   return '';
 }

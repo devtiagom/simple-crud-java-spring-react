@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
 import api from '../../services/api';
-import AppLayout from '../../template/AppLayout';
 import Page from '../../components/page';
 import PageHeader from '../../components/page-header';
 import ProductRegister from '../../components/product-register';
@@ -47,7 +46,7 @@ const defaultErrorResponseAlert = {
   alertType: 'multi',
 };
 
-function Products() {
+function Products({ showSideBar }) {
   const [product, setProduct] = useState(productInitialState);
   const [products, setProducts] = useState({});
   const [categories, setCategories] = useState({});
@@ -211,44 +210,42 @@ function Products() {
   const handleDelete = selectedProduct => fillInFields(selectedProduct, 'delete', true);
 
   return (
-    <AppLayout>
-      <Page>
-        <PageHeader icon={FaShoppingCart} title="Produtos" />
+    <Page>
+      <PageHeader icon={FaShoppingCart} title="Produtos" showSideBar={showSideBar} />
 
-        <Show condition={showAlertToast}>
-          <AlertToast
-            alertClass={serverResponseAlert.alertClass}
-            alertType={serverResponseAlert.alertType}
-            alertTitle={serverResponseAlert.alertTitle}
-            alertTextStrong={serverResponseAlert.alertTextStrong}
-            alertText={serverResponseAlert.alertText}
-            alertList={serverResponseAlert.alertList}
-          />
-        </Show>
+      <Show condition={showAlertToast}>
+        <AlertToast
+          alertClass={serverResponseAlert.alertClass}
+          alertType={serverResponseAlert.alertType}
+          alertTitle={serverResponseAlert.alertTitle}
+          alertTextStrong={serverResponseAlert.alertTextStrong}
+          alertText={serverResponseAlert.alertText}
+          alertList={serverResponseAlert.alertList}
+        />
+      </Show>
 
-        <div className="container page-body">
-          <ProductRegister
-            categoryList={categories}
-            currentProduct={product}
-            updateProductField={handleUpdateProductField}
-            submit={handleSubmit}
-            clearFields={handleClearFields}
-            cancelOperation={handleCancelOperation}
-            confirmUpdate={handleConfirmUpdate}
-            confirmDelete={handleConfirmDelete}
-            registerMode={mode}
-          />
+      <div className="container page-body">
+        <ProductRegister
+          categoryList={categories}
+          currentProduct={product}
+          updateProductField={handleUpdateProductField}
+          submit={handleSubmit}
+          clearFields={handleClearFields}
+          cancelOperation={handleCancelOperation}
+          confirmUpdate={handleConfirmUpdate}
+          confirmDelete={handleConfirmDelete}
+          registerMode={mode}
+        />
 
-          <ProductViewer
-            productList={products}
-            updateProduct={handleUpdate}
-            deleteProduct={handleDelete}
-            filters={filterParameters}
-            updateFilters={setFilterParameters}
-          />
-        </div>
-      </Page>
-    </AppLayout>
+        <ProductViewer
+          productList={products}
+          updateProduct={handleUpdate}
+          deleteProduct={handleDelete}
+          filters={filterParameters}
+          updateFilters={setFilterParameters}
+        />
+      </div>
+    </Page>
   );
 }
 

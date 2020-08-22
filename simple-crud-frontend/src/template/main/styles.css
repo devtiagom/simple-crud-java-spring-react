@@ -2,6 +2,8 @@
   margin-top: var(--header-height);
   min-height: calc(100vh - var(--header-height));
   background-color: var(--main-bg-color);
+
+  transition: all 0.3s;
 }
 
 .main-with-side-bar {

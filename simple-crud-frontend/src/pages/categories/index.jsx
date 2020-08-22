@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FaList } from 'react-icons/fa';
 
 import api from '../../services/api';
-import AppLayout from '../../template/AppLayout';
 import Page from '../../components/page';
 import PageHeader from '../../components/page-header';
 import CategoryRegister from '../../components/category-register';
@@ -43,7 +42,7 @@ const defaultErrorResponseAlert = {
   alertType: 'multi',
 };
 
-function Categories() {
+function Categories({ showSideBar }) {
   const [category, setCategory] = useState(CategoryInitialState);
   const [categories, setCategories] = useState({});
   const [filterParameters, setFilterParameters] = useState(filterParametersInitialState);
@@ -174,43 +173,41 @@ function Categories() {
   const handleDelete = selectedCategory => fillInFields(selectedCategory, 'delete', true);
 
   return (
-    <AppLayout>
-      <Page>
-        <PageHeader icon={FaList} title="Categorias" />
+    <Page>
+      <PageHeader icon={FaList} title="Categorias" showSideBar={showSideBar} />
 
-        <Show condition={showAlertToast}>
-          <AlertToast
-            alertClass={serverResponseAlert.alertClass}
-            alertType={serverResponseAlert.alertType}
-            alertTitle={serverResponseAlert.alertTitle}
-            alertTextStrong={serverResponseAlert.alertTextStrong}
-            alertText={serverResponseAlert.alertText}
-            alertList={serverResponseAlert.alertList}
-          />
-        </Show>
+      <Show condition={showAlertToast}>
+        <AlertToast
+          alertClass={serverResponseAlert.alertClass}
+          alertType={serverResponseAlert.alertType}
+          alertTitle={serverResponseAlert.alertTitle}
+          alertTextStrong={serverResponseAlert.alertTextStrong}
+          alertText={serverResponseAlert.alertText}
+          alertList={serverResponseAlert.alertList}
+        />
+      </Show>
 
-        <div className="container page-body">
-          <CategoryRegister
-            currentCategory={category}
-            updateCategoryField={handleUpdateCategoryField}
-            submit={handleSubmit}
-            clearFields={handleClearFields}
-            cancelOperation={handleCancelOperation}
-            confirmUpdate={handleConfirmUpdate}
-            confirmDelete={handleConfirmDelete}
-            registerMode={mode}
-          />
+      <div className="container page-body">
+        <CategoryRegister
+          currentCategory={category}
+          updateCategoryField={handleUpdateCategoryField}
+          submit={handleSubmit}
+          clearFields={handleClearFields}
+          cancelOperation={handleCancelOperation}
+          confirmUpdate={handleConfirmUpdate}
+          confirmDelete={handleConfirmDelete}
+          registerMode={mode}
+        />
 
-          <CategoryViewer
-            categoryList={categories}
-            updateCategory={handleUpdate}
-            deleteCategory={handleDelete}
-            filters={filterParameters}
-            updateFilters={setFilterParameters}
-          />
-        </div>
-      </Page>
-    </AppLayout>
+        <CategoryViewer
+          categoryList={categories}
+          updateCategory={handleUpdate}
+          deleteCategory={handleDelete}
+          filters={filterParameters}
+          updateFilters={setFilterParameters}
+        />
+      </div>
+    </Page>
   );
 }
 
