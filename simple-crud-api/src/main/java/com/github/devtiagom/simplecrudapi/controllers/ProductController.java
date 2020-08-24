@@ -24,13 +24,14 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductGetDTO>> index(
+            @RequestParam(value = "name", defaultValue = "") String name,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "24") Integer size,
             @RequestParam(value = "direction", defaultValue = "ASC") String direction,
             @RequestParam(value = "orderBy", defaultValue = "name") String orderBy
     ) {
         Page<ProductGetDTO> products = this.productService
-                .getAllProducts(page, size, direction, orderBy)
+                .getAllProducts(name, page, size, direction, orderBy)
                 .map(ProductGetDTO::new);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }

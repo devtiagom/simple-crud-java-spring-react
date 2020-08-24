@@ -1,6 +1,7 @@
 package com.github.devtiagom.simplecrudapi.services;
 
 import com.github.devtiagom.simplecrudapi.controllers.dtos.request.ProductSaveDTO;
+import com.github.devtiagom.simplecrudapi.controllers.dtos.response.ProductGetDTO;
 import com.github.devtiagom.simplecrudapi.domain.CategoryDomain;
 import com.github.devtiagom.simplecrudapi.domain.ProductDomain;
 import com.github.devtiagom.simplecrudapi.repositories.ProductRepository;
@@ -20,19 +21,32 @@ public class ProductService {
     private final CategoryService categoryService;
 
     public Page<ProductDomain> getAllProducts(
+            String name,
             Integer page,
             Integer size,
             String direction,
             String orderBy
     ) {
-        return this.productRepository.findAll(
+        if (name.isEmpty()) {
+            return this.productRepository.findAll(
                 PageRequest.of(
                         page,
                         size,
                         Sort.Direction.valueOf(direction),
                         orderBy
                 )
-        );
+            );
+        } else {
+            return this.productRepository.findAllByNameContainingIgnoreCase(
+                name,
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.Direction.valueOf(direction),
+                        orderBy
+                )
+            );
+        }
     }
 
     public Optional<ProductDomain> getOneProduct(Long id) {
