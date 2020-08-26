@@ -15,6 +15,24 @@ The project has just two entities: Product and Category. There is a one-to-many 
 ### Products page
 ![](img/products-page.png)
 
+### Categories page
+![](img/products-page.png)
+
+### Pagination detail
+![](img/pagination-detail.png)
+
+### Update product detail
+![](img/update-product-detail.png)
+
+### Delete product detail
+![](img/delete-product-detail.png)
+
+### Alert success detail
+![](img/alert-success-detail.png)
+
+### Alert error detail
+![](img/alert-error-detail.png)
+
 ## Download the Application
 You can clone this repository with HTTPS using the command below. You'll get two folders: *"./simple-crud-api"* and *"./simple-crud-frontend"*, containing the backend and the frontend projects respectively.
 ```bash
