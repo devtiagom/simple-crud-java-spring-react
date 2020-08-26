@@ -16,7 +16,7 @@ The project has just two entities: Product and Category. There is a one-to-many 
 ![](img/products-page.png)
 
 ### Categories page
-![](img/products-page.png)
+![](img/categories-page.png)
 
 ### Pagination detail
 ![](img/pagination-detail.png)
