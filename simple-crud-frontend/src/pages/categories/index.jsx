@@ -64,65 +64,53 @@ function Categories({ showSideBar }) {
       .then(response => setCategories(response.data));
   }
 
+  function defineResponseAlert(requestType, response, success) {
+    if (success) {
+      const action = requestType === 'post'
+        ? 'cadastrada'
+        : requestType === 'put'
+          ? 'atualizada'
+          : 'excluída';
+      const alertText = `Categoria ${action} com sucesso!`;
+      return {
+        ...defaultSuccessResponseAlert,
+          alertText,
+      }
+    } else {
+      return {
+        ...defaultErrorResponseAlert,
+        alertTitle: response.data.msg,
+        alertList: response.data.errors.map(error => ({
+          strong: error.fieldName,
+          text: error.message,
+        })),
+      }
+    }
+  }
+
   async function makeRequest(method, id) {
     let response = {};
+    let newResponseAlert = {};
 
     try {
-      response = await api[method](`/categories/${id ? id : ''}`, {
+      response = await api[method](
+        `/categories/${id ? id : ''}`,
+        method === 'delete' ? {} : {
         name: category.name,
       });
-
       window.scrollTo(0, document.body.scrollHeight);
     } catch (error) {
       response = error.response;
     }
 
-    if (response === undefined) return;
-
-    let newResponseAlert = {};
-
-    if (method === 'post') {
-      if (response.status === HTTP_STATUS_CREATED) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Categoria cadastrada com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
-    } else if (method === 'put') {
-      if (response.status === HTTP_STATUS_OK) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Categoria atualizada com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
+    if (
+      response.status === HTTP_STATUS_CREATED ||
+      response.status === HTTP_STATUS_OK ||
+      response.status === HTTP_STATUS_NO_CONTENT
+    ) {
+      newResponseAlert = defineResponseAlert(method, response, true);
     } else {
-      if (response.status === HTTP_STATUS_NO_CONTENT) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Categoria excluída com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
+      newResponseAlert = defineResponseAlert(method, response, false);
     }
 
     setServerResponseAlert({ ...serverResponseAlert, ...newResponseAlert });
@@ -137,18 +125,6 @@ function Categories({ showSideBar }) {
   const handleSubmit = () => makeRequest('post');
   const handleConfirmUpdate = () => makeRequest('put', category.id);
   const handleConfirmDelete = () => makeRequest('delete', category.id);
-
-  function handleUpdateCategoryField({ target }) {
-    const field = target.name;
-    const value = target.value;
-
-    if (field === 'name') {
-      setCategory({ ...category, name: value });
-    } else {
-      setCategory({ ...category });
-    }
-  }
-
   const handleClearFields = () => setCategory(CategoryInitialState);
 
   function handleCancelOperation() {
@@ -190,7 +166,7 @@ function Categories({ showSideBar }) {
       <div className="container page-body">
         <CategoryRegister
           currentCategory={category}
-          updateCategoryField={handleUpdateCategoryField}
+          updateCategoryField={setCategory}
           submit={handleSubmit}
           clearFields={handleClearFields}
           cancelOperation={handleCancelOperation}

@@ -75,69 +75,58 @@ function Products({ showSideBar }) {
       .then(response => setProducts(response.data));
   }
 
+  function defineResponseAlert(requestType, response, success) {
+    if (success) {
+      const action = requestType === 'post'
+        ? 'cadastrado'
+        : requestType === 'put'
+          ? 'atualizado'
+          : 'excluído';
+      const alertText = `Produto ${action} com sucesso!`;
+      return {
+        ...defaultSuccessResponseAlert,
+          alertText,
+      }
+    } else {
+      return {
+        ...defaultErrorResponseAlert,
+        alertTitle: response.data.msg,
+        alertList: response.data.errors.map(error => ({
+          strong: error.fieldName,
+          text: error.message,
+        })),
+      }
+    }
+  }
+
   async function makeRequest(method, id) {
     let response = {};
+    let newResponseAlert = {};
 
     try {
-      response = await api[method](`/products/${id ? id : ''}`, {
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        stock: product.stock,
-        categoryId: product.categoryId,
-      });
-
+      response = await api[method](
+        `/products/${id ? id : ''}`,
+        method === 'delete' ? {} : {
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          stock: product.stock,
+          categoryId: product.categoryId,
+        }
+      );
       window.scrollTo(0, document.body.scrollHeight);
     } catch (error) {
       response = error.response;
     }
 
-    if (response === undefined) return;
-
-    let newResponseAlert = {};
-
-    if (method === 'post') {
-      if (response.status === HTTP_STATUS_CREATED) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Produto cadastrado com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
-    } else if (method === 'put') {
-      if (response.status === HTTP_STATUS_OK) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Produto atualizado com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
+    if (
+        response.status === HTTP_STATUS_CREATED ||
+        response.status === HTTP_STATUS_OK ||
+        response.status === HTTP_STATUS_NO_CONTENT
+      ) {
+        newResponseAlert = defineResponseAlert(method, response, true);
     } else {
-      if (response.status === HTTP_STATUS_NO_CONTENT) {
-        newResponseAlert = { ...defaultSuccessResponseAlert };
-        newResponseAlert.alertText = 'Produto excluído com sucesso!';
-      } else {
-        newResponseAlert = { ...defaultErrorResponseAlert };
-        newResponseAlert.alertTitle = response.data.msg;
-        newResponseAlert.alertList = response.data.errors.map(error => {
-          return {
-            strong: error.fieldName,
-            text: error.message,
-          };
-        });
-      }
+      newResponseAlert = defineResponseAlert(method, response, false);
     }
 
     setServerResponseAlert({ ...serverResponseAlert, ...newResponseAlert });
@@ -152,32 +141,6 @@ function Products({ showSideBar }) {
   const handleSubmit = () => makeRequest('post');
   const handleConfirmUpdate = () => makeRequest('put', product.id);
   const handleConfirmDelete = () => makeRequest('delete', product.id);
-
-  function handleUpdateProductField({ target }) {
-    const field = target.name;
-    const value = target.value;
-
-    switch (field) {
-      case 'name':
-        setProduct({ ...product, name: value });
-        break;
-      case 'description':
-        setProduct({ ...product, description: value });
-        break;
-      case 'price':
-        setProduct({ ...product, price: value });
-        break;
-      case 'stock':
-        setProduct({ ...product, stock: value });
-        break;
-      case 'category':
-        setProduct({ ...product, categoryId: value });
-        break;
-      default:
-        setProduct({ ...product });
-    }
-  }
-
   const handleClearFields = () => setProduct(productInitialState);
 
   function handleCancelOperation() {
@@ -228,7 +191,7 @@ function Products({ showSideBar }) {
         <ProductRegister
           categoryList={categories}
           currentProduct={product}
-          updateProductField={handleUpdateProductField}
+          updateProductField={setProduct}
           submit={handleSubmit}
           clearFields={handleClearFields}
           cancelOperation={handleCancelOperation}

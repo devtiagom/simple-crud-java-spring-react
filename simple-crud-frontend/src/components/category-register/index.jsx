@@ -33,7 +33,12 @@ function CategoryRegister({
                   className="form-control form-control-sm"
                   value={currentCategory.name}
                   placeholder="Nome da categoria"
-                onChange={updateCategoryField}
+                onChange={
+                  event => updateCategoryField({
+                    ...currentCategory,
+                    name: event.target.value,
+                  })
+                }
                 readOnly={currentCategory.readOnly}
                 />
               </div>

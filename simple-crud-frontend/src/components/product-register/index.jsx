@@ -34,7 +34,12 @@ function ProductRegister({
                   className="form-control form-control-sm"
                   value={currentProduct.name}
                   placeholder="Nome do produto"
-                  onChange={updateProductField}
+                  onChange={
+                    event => updateProductField({
+                      ...currentProduct,
+                      name: event.target.value,
+                    })
+                  }
                   readOnly={currentProduct.readOnly}
                 />
               </div>
@@ -49,7 +54,12 @@ function ProductRegister({
                   className="form-control form-control-sm"
                   value={currentProduct.description}
                   placeholder="Descrição do produto"
-                  onChange={updateProductField}
+                  onChange={
+                    event => updateProductField({
+                      ...currentProduct,
+                      description: event.target.value,
+                    })
+                  }
                   readOnly={currentProduct.readOnly}
                 />
               </div>
@@ -64,7 +74,12 @@ function ProductRegister({
                   className="form-control form-control-sm"
                   value={currentProduct.price}
                   placeholder="Preço (R$)"
-                  onChange={updateProductField}
+                  onChange={
+                    event => updateProductField({
+                      ...currentProduct,
+                      price: event.target.value,
+                    })
+                  }
                   readOnly={currentProduct.readOnly}
                 />
               </div>
@@ -82,7 +97,12 @@ function ProductRegister({
                   className="form-control form-control-sm"
                   value={currentProduct.stock}
                   placeholder="Quantidade em estoque"
-                  onChange={updateProductField}
+                  onChange={
+                    event => updateProductField({
+                      ...currentProduct,
+                      stock: event.target.value,
+                    })
+                  }
                   readOnly={currentProduct.readOnly}
                 />
               </div>
@@ -95,7 +115,12 @@ function ProductRegister({
                   id="category"
                   className="form-control form-control-sm"
                   value={currentProduct.categoryId}
-                  onChange={updateProductField}
+                  onChange={
+                    event => updateProductField({
+                      ...currentProduct,
+                      categoryId: event.target.value,
+                    })
+                  }
                   readOnly={currentProduct.readOnly}
                 >
                   <option value="0">Selecione uma categoria</option>
