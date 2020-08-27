@@ -16,3 +16,31 @@
 .side-bar-off {
   width: 0;
 }
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.menu-item {
+  color: var(--side-bar-link-txt-color);
+  margin-bottom: 5px;
+  padding: 5px 10px;
+  border-radius: 3px;
+
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-active {
+  background-color: var(--side-bar-link-bg-color);
+  border-left: 3px solid var(--side-bar-link-left-color);
+  color: #FFF;
+}
+
+.menu-item:hover {
+  background: var(--side-bar-link-bg-color);
+  text-decoration: none;
+  color: #FFF;
+}
